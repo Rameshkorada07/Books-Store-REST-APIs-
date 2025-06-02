@@ -7,12 +7,53 @@ const router = express.Router();
 // In-memory user and book data
 const users = [];
 const books = {
-  "123456": {
-    title: "Sample Book",
-    author: "Author A",
+  "9780140449136": {
+    title: "The Odyssey",
+    author: "Homer",
+    reviews: {}
+  },
+  "9780439139601": {
+    title: "Harry Potter and the Goblet of Fire",
+    author: "J.K. Rowling",
+    reviews: {}
+  },
+  "9780061120084": {
+    title: "To Kill a Mockingbird",
+    author: "Harper Lee",
+    reviews: {}
+  },
+  "9780451524935": {
+    title: "1984",
+    author: "George Orwell",
+    reviews: {}
+  },
+  "9780316769488": {
+    title: "The Catcher in the Rye",
+    author: "J.D. Salinger",
+    reviews: {}
+  },
+  "9780743273565": {
+    title: "The Great Gatsby",
+    author: "F. Scott Fitzgerald",
+    reviews: {}
+  },
+  "9780307277671": {
+    title: "The Road",
+    author: "Cormac McCarthy",
+    reviews: {}
+  },
+  "9781501124020": {
+    title: "It Ends with Us",
+    author: "Colleen Hoover",
+    reviews: {}
+  },
+  "9780385504201": {
+    title: "The Da Vinci Code",
+    author: "Dan Brown",
     reviews: {}
   }
 };
+
 
 // Middleware to verify JWT
 function authenticateToken(req, res, next) {
@@ -62,6 +103,8 @@ router.get('/books/review/:isbn', (req, res) => {
 router.post('/register', async (req, res) => {
    console.log('Register endpoint hit');
   const { username, password } = req.body;
+  const userExists = users.find(u => u.username === username);
+  if (userExists) return res.status(400).send('User already exists');
   const hashed = await bcrypt.hash(password, 10);
   users.push({ username, password: hashed });
   res.send('User registered');
